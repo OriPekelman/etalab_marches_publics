@@ -40,15 +40,26 @@ class Etalab::Importer::PublicTenderImporter < Etalab::Importer
   end
   
   def winner_name(val)
-    val.to_s
+    siren={}
+    res =  find_siren(val)
+    if  res["hits"]["total"] > 0
+          puts "FOUND CANDIDATE for #{val} :: #{res["hits"]["hits"][0]["_source"]["name"]} (#{res["hits"]["hits"][0]["_source"]["commercial_name"]})" 
+          siren = res["hits"]["hits"][0]["_source"]
+    end
+    
+    {winner: val, siren: siren}
   end
   
   def notification_date(val)
-    val
+    begin
+     Date.parse(val) 
+   rescue
+     nil
+   end
   end
   
   def postal_code(val)
-    val
+    val.to_i
   end
   
   def tender_type(val)
@@ -80,12 +91,33 @@ class Etalab::Importer::PublicTenderImporter < Etalab::Importer
      binding.pry 
    end  
    
-   def find_siren
-     response = @es.mlt index: @index_name, type: 'd', id: 1,
-                           mlt_fields: 'name',
-                           min_doc_freq: 0,
-                           min_term_freq: 0,
-                           min_word_len: 0
+   def find_siren(text)
+    
+      @es.search index: "etalab_siren_2012",
+      body: {query:{ bool: { should: [{
+         fuzzy: {
+            name: {
+               min_similarity: 0.7,
+               boost: 1,
+               value: text,
+               prefix_length: 2
+            }
+         }
+      },
+      {
+         fuzzy: {
+            commercial_name: {
+               min_similarity: 0.7,
+               boost: 3,
+               value: text,
+               prefix_length: 2
+            }
+         }
+         }
+       ]}}}
+      
+
+#      body: {query: { fuzzy_like_this: { fields: ["name", "commercial_name"], like_text: text, max_query_terms: 12,  min_similarity: 0.95,} }}
    end
 end
 

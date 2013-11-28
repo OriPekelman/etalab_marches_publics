@@ -43,13 +43,11 @@ class Etalab::Importer::SirenImporter < Etalab::Importer
 
       @mapping.each_with_index do |field, column|
         key = field.keys[0]
-        val =  self.public_send(key, line[column +1])  
-        puts "." if (column % 10)==0
+        val =  self.public_send(key, line[column])  
         @h[key] = val
       end
       self.index!(@h, line)
     end
-    @last_row
   end
   
 end
@@ -57,4 +55,4 @@ end
 
 
 lines = Etalab::Importer::SirenImporter.new("initial_data/siren_quoted.csv", "siren_2012").import!
-puts "#{lines} imported"
+puts "imported stuff"

@@ -14,7 +14,7 @@ class Etalab::Importer
     @h = {}
 
     # Connect to localhost:9200 by default:
-    @es = Elasticsearch::Client.new log: true
+    @es = Elasticsearch::Client.new log: false
   end
   
   def index!(doc,id)

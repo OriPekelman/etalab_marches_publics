@@ -9,7 +9,7 @@ curl http://localhost:9200/etalab_siren_2012/_search -d'
 {
   "query" : {
     "fuzzy_like_this" : {
-       "fields" : ["postal_code", "commerce_tribunal"],
+       "fields" : ["name", "commercial_name"],
        "like_text" : "ID ACT DEVELOPPEMENT",
        "max_query_terms" : 12
     }
