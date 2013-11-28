@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "simple-spreadsheet"
+
+s = SimpleSpreadsheet::Workbook.read("my_spreadsheets_file.xls")

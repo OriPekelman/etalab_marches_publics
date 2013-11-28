@@ -1,0 +1,1 @@
+sed '1,3d' initial_data/c261d3e227080170ff14ac658b1062f5.csv > ../
