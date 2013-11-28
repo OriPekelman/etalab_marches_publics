@@ -3,3 +3,6 @@
 curl http://www.data.gouv.fr/var/download/c261d3e227080170ff14ac658b1062f5.csv > ./initial_data/c261d3e227080170ff14ac658b1062f5.csv #- 2010 http://www.data.gouv.fr/DataSet/550894
 curl http://www.data.gouv.fr/var/download/55771092e959e38441103367c82f9b4c.csv > ./initial_data/55771092e959e38441103367c82f9b4c.csv #- 2011 http://www.data.gouv.fr/DataSet/30380017
 curl http://www.data.gouv.fr/var/download/ae0748773b53acaf13669b344db1ea2a.xls > ./initial_data/ae0748773b53acaf13669b344db1ea2a.xls #- 2012 http://www.data.gouv.fr/DataSet/572290
+
+curl http://tangui.eu.org/siren/EBODACC-A.exemple.siren > ./initial_data/siren.csv #extraction partielle
+ 

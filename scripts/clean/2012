@@ -1,5 +1,93 @@
 #!/usr/bin/env ruby
+require_relative "etalab"
 
-require "simple-spreadsheet"
+class Etalab::Importer::PublicTenderImporter < Etalab::Importer
+  
+  def initialize(file_name, index_name)
+    @s = SimpleSpreadsheet::Workbook.read(file_name)
+    @s.selected_sheet = @s.sheets.first
+    @last_row = @s.last_row
+    @first_row = @s.first_row + 1
+        
+    mapping = [
+      {:notification_year=>"Année de notification"},
+      {:public_entity=>"Entité Publique"},
+      {:buyer=>"Entité d'Achat"},
+      {:winner_name=>"Attributaire est une PME"},
+      {:notification_date=>"Date de notification"},
+      {:postal_code=>"Code Postal Attributaire"},
+      {:tender_type=>"Nature du Marché"},
+      {:tender_object=>"Objet du Marché"},
+      {:budget_bound_lower=>"Tranche Budgétaire"},
+      {:budget_bound_upper=>""},
+      {:budget_final=>"Montant du marché si renseigné"},
+      {:smc=>"Attributaire est une PME"}
+    ]
+    super(file_name, mapping, index_name)
+  end
 
-s = SimpleSpreadsheet::Workbook.read("my_spreadsheets_file.xls")
+
+  def notification_year(val)
+    val.to_i
+  end
+  
+  def public_entity(val)
+    val.to_s
+  end
+  
+  def buyer(val)
+    val.to_s
+  end
+  
+  def winner_name(val)
+    val.to_s
+  end
+  
+  def notification_date(val)
+    val
+  end
+  
+  def postal_code(val)
+    val
+  end
+  
+  def tender_type(val)
+    val
+  end
+  
+  def tender_object(val)
+    val.to_s
+  end
+  
+  def budget_bound_lower(val)
+    val.to_i
+  end
+  
+  def budget_bound_upper(val)
+    val.to_i
+  end
+  
+  def budget_final(val)
+    val.to_i
+  end
+  
+  def smc(val)
+    val
+  end
+  
+  def method_missing(m, *args, &block)  
+     puts "There's no method called #{m} here -- please try again." 
+     binding.pry 
+   end  
+   
+   def find_siren
+     response = @es.mlt index: @index_name, type: 'd', id: 1,
+                           mlt_fields: 'name',
+                           min_doc_freq: 0,
+                           min_term_freq: 0,
+                           min_word_len: 0
+   end
+end
+
+lines = Etalab::Importer::PublicTenderImporter.new("initial_data/ae0748773b53acaf13669b344db1ea2a.xls", "marches_publics_2012").import!
+puts "#{lines} imported"

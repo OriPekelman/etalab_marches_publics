@@ -1,3 +1,6 @@
 source 'https://rubygems.org'
 
- gem "simple-spreadsheet"
+gem "simple-spreadsheet"
+gem "elasticsearch"
+gem "roo"
+gem "pry"
